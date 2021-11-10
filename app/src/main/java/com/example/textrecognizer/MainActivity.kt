@@ -14,9 +14,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.util.Log
 import android.view.View
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.common.InputImage
@@ -34,6 +32,8 @@ class MainActivity : AppCompatActivity() {
     private val SAVED_TEXT_TAG = "SavedText"
     private val REQUEST_CODE_PERMISSIONS = 10
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+
+    lateinit var camera: Camera
 
     private lateinit var cameraExecutor: ExecutorService
 
@@ -122,35 +122,57 @@ class MainActivity : AppCompatActivity() {
                 cameraProvider.unbindAll()
 
                 // Bind use cases to camera
-                cameraProvider.bindToLifecycle(
+                camera = cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview
                 )
+
+
+                binding.apply {
+                    // Set up the listener for take photo button
+                    cameraCaptureButton.setOnClickListener {
+                        if (viewFinder.bitmap != null) {
+                            runTextRecognition(viewFinder.bitmap!!)
+                        } else {
+                            showToast(getString(R.string.camera_error_default_msg))
+                        }
+                    }
+
+                    camera.apply {
+                        if(cameraInfo.hasFlashUnit()){
+                            torchButton.setOnClickListener {
+                                cameraControl.enableTorch(cameraInfo.torchState.value == TorchState.OFF)
+                            }
+                        } else {
+                            torchButton.setOnClickListener {
+                                showToast(getString(R.string.torch_not_available_msg))
+                            }
+                        }
+
+                        cameraInfo.torchState.observe(this@MainActivity){ torchState->
+                            if(torchState== TorchState.OFF){
+                                torchButton.setImageResource(R.drawable.ic_flashlight_on)
+                            } else {
+                                torchButton.setImageResource(R.drawable.ic_flashlight_off)
+                            }
+                        }
+
+                    }
+
+
+                    copyToClipboard.setOnClickListener {
+                        val textToCopy=textInImage.text
+                        if(textToCopy.isNotEmpty()){
+                            copyToClipboard(textToCopy)
+                        }
+                    }
+
+                }
 
             } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
 
         }, ContextCompat.getMainExecutor(this))
-
-
-        binding.apply {
-            // Set up the listener for take photo button
-            cameraCaptureButton.setOnClickListener {
-                if (viewFinder.bitmap != null) {
-                    runTextRecognition(viewFinder.bitmap!!)
-                } else {
-                    showToast(getString(R.string.camera_error_default_msg))
-                }
-            }
-
-            copyToClipboard.setOnClickListener {
-                val textToCopy=textInImage.text
-                if(textToCopy.isNotEmpty()){
-                    copyToClipboard(textToCopy)
-                }
-            }
-
-        }
 
     }
 

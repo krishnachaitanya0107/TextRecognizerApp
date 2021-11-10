@@ -72,20 +72,29 @@
     </ScrollView>
 
     <ImageView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/torchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginLeft="50dp"
+        android:padding="10dp"
+        android:elevation="2dp"
+        app:layout_constraintTop_toTopOf="@id/cameraCaptureButton"
+        app:layout_constraintBottom_toBottomOf="@id/cameraCaptureButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:src="@drawable/ic_flashlight_on"
+        android:background="@color/purple_200"
         />
 
     <Button
         android:id="@+id/cameraCaptureButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_margin="50dp"
         android:elevation="2dp"
         android:padding="10dp"
+        android:textAllCaps="false"
         android:text="Extract Text"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,4 +4,5 @@
     <string name="camera_error_default_msg">"Oops , Couldn't get image from camera"</string>
     <string name="permission_denied_msg">Permissions not granted by the user.</string>
     <string name="clipboard_text">Copied to Clipboard</string>
+    <string name="torch_not_available_msg">Oops , Torch Not Available</string>
 </resources>
