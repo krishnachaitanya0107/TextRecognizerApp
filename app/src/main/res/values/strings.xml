@@ -1,0 +1,7 @@
+<resources>
+    <string name="no_text_found">Couldn\'t Find any text in here…</string>
+    <string name="error_default_msg">"Oops , Something went wrong"</string>
+    <string name="camera_error_default_msg">"Oops , Couldn't get image from camera"</string>
+    <string name="permission_denied_msg">Permissions not granted by the user.</string>
+    <string name="clipboard_text">Copied to Clipboard</string>
+</resources>
