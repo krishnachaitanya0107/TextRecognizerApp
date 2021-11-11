@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     camera.apply {
-                        if(cameraInfo.hasFlashUnit()){
+                        if (cameraInfo.hasFlashUnit()) {
                             torchButton.setOnClickListener {
                                 cameraControl.enableTorch(cameraInfo.torchState.value == TorchState.OFF)
                             }
@@ -148,8 +148,8 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
 
-                        cameraInfo.torchState.observe(this@MainActivity){ torchState->
-                            if(torchState== TorchState.OFF){
+                        cameraInfo.torchState.observe(this@MainActivity) { torchState ->
+                            if (torchState == TorchState.OFF) {
                                 torchButton.setImageResource(R.drawable.ic_flashlight_on)
                             } else {
                                 torchButton.setImageResource(R.drawable.ic_flashlight_off)
@@ -160,8 +160,8 @@ class MainActivity : AppCompatActivity() {
 
 
                     copyToClipboard.setOnClickListener {
-                        val textToCopy=textInImage.text
-                        if(textToCopy.isNotEmpty()){
+                        val textToCopy = textInImage.text
+                        if (textToCopy.isNotEmpty()) {
                             copyToClipboard(textToCopy)
                         }
                     }
@@ -202,9 +202,10 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
 
-    fun copyToClipboard(text: CharSequence){
-        val clipboard = ContextCompat.getSystemService(applicationContext, ClipboardManager::class.java)
-        val clip = ClipData.newPlainText("label",text)
+    fun copyToClipboard(text: CharSequence) {
+        val clipboard =
+            ContextCompat.getSystemService(applicationContext, ClipboardManager::class.java)
+        val clip = ClipData.newPlainText("label", text)
         clipboard?.setPrimaryClip(clip)
         showToast(getString(R.string.clipboard_text))
     }
@@ -217,7 +218,7 @@ class MainActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         val textInImage = (binding.textInImage.text).toString()
-        if(textInImage.isNotEmpty()){
+        if (textInImage.isNotEmpty()) {
             outState.putString(SAVED_TEXT_TAG, textInImage)
         }
     }

@@ -76,14 +76,13 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginLeft="50dp"
-        android:padding="10dp"
+        android:background="@color/purple_200"
         android:elevation="2dp"
-        app:layout_constraintTop_toTopOf="@id/cameraCaptureButton"
+        android:padding="10dp"
+        android:src="@drawable/ic_flashlight_on"
         app:layout_constraintBottom_toBottomOf="@id/cameraCaptureButton"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:src="@drawable/ic_flashlight_on"
-        android:background="@color/purple_200"
-        />
+        app:layout_constraintTop_toTopOf="@id/cameraCaptureButton" />
 
     <Button
         android:id="@+id/cameraCaptureButton"
@@ -92,8 +91,8 @@
         android:layout_margin="50dp"
         android:elevation="2dp"
         android:padding="10dp"
-        android:textAllCaps="false"
         android:text="Extract Text"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
