@@ -3,7 +3,7 @@
 - Detects text in images Using the ML Kit Text Recognition API
 - Uses the CameraX to show a viewfinder and display the camera preview 
 - Provides a Flashlight button to turn on/off the device flashlight if needed
-- Extracted text can be copied to clipboard
+- Extracted text can be copied to clipboard or shared 
 - Handles device rotation as well 
 
 # References
