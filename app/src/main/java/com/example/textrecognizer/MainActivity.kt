@@ -23,6 +23,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import android.content.Intent
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -166,6 +168,17 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
 
+                    share.setOnClickListener {
+                        val textToCopy = textInImage.text.toString()
+                        if (textToCopy.isNotEmpty()) {
+                            shareText(textToCopy)
+                        }
+                    }
+
+                    close.setOnClickListener {
+                        scrollView.visibility=View.GONE
+                    }
+
                 }
 
             } catch (exc: Exception) {
@@ -202,7 +215,15 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
 
-    fun copyToClipboard(text: CharSequence) {
+    private fun shareText(text: String) {
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_TEXT, text)
+        startActivity(Intent.createChooser(shareIntent, "Share via"))
+    }
+
+    private fun copyToClipboard(text: CharSequence) {
         val clipboard =
             ContextCompat.getSystemService(applicationContext, ClipboardManager::class.java)
         val clip = ClipData.newPlainText("label", text)

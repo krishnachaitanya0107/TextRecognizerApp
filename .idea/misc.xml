@@ -4,7 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Paparao/StudioProjects/TextRecognizer/app/src/main/res/drawable/gradient.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/Paparao/StudioProjects/TextRecognizer/app/src/main/res/drawable/ic_close.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/Paparao/StudioProjects/TextRecognizer/app/src/main/res/drawable/ic_copy_clipboard.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/Paparao/StudioProjects/TextRecognizer/app/src/main/res/drawable/ic_flashlight_on.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/Paparao/StudioProjects/TextRecognizer/app/src/main/res/drawable/ic_share.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/Paparao/StudioProjects/TextRecognizer/app/src/main/res/layout/activity_main.xml" value="0.165625" />
       </map>
     </option>

@@ -35,6 +35,14 @@
             android:layout_height="wrap_content"
             android:padding="8dp">
 
+            <ImageView
+                android:id="@+id/close"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_close"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@id/title" />
+
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
@@ -42,7 +50,7 @@
                 android:padding="10dp"
                 android:text="Text In Image"
                 android:textAlignment="center"
-                android:textColor="@color/purple_500"
+                android:textColor="@color/purple_200"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -55,7 +63,7 @@
                 android:layout_height="30dp"
                 android:src="@drawable/ic_copy_clipboard"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/title" />
 
             <TextView
                 android:id="@+id/textInImage"
@@ -82,6 +90,20 @@
         android:src="@drawable/ic_flashlight_on"
         app:layout_constraintBottom_toBottomOf="@id/cameraCaptureButton"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cameraCaptureButton" />
+
+
+    <ImageView
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@color/purple_200"
+        android:elevation="2dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_share"
+        app:layout_constraintBottom_toBottomOf="@id/cameraCaptureButton"
+        app:layout_constraintLeft_toRightOf="@id/torchButton"
+        app:layout_constraintRight_toLeftOf="@id/cameraCaptureButton"
         app:layout_constraintTop_toTopOf="@id/cameraCaptureButton" />
 
     <Button
