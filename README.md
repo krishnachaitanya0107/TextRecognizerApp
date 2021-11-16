@@ -1,4 +1,4 @@
-# About
+# Text Recognizer App
 
 An Android app that can recognize text from an image with the help of Machine Learning-Kit .
 
@@ -14,6 +14,14 @@ Go to [Releases](https://github.com/krishnachaitanya0107/TextRecognizerApp/relea
 - Extracted text can be copied to clipboard or can be shared via any another text sharing app available on the user's device
 - Handles device rotation as well 
 
+# Tools & Technology Used
+
+- Android Studio & Kotlin
+- ML Kit Text Recognition API
+- CameraX and viewFinder
+- Flashlight
+
 # References
+
 - ML kit Codelabs - https://codelabs.developers.google.com/codelabs/mlkit-android#0
 - ML kit Documentation - https://developers.google.com/ml-kit/vision/text-recognition/android#kotlin
