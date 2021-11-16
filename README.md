@@ -20,6 +20,7 @@ Go to [Releases](https://github.com/krishnachaitanya0107/TextRecognizerApp/relea
 - ML Kit Text Recognition API
 - CameraX and viewFinder
 - Flashlight
+- Lottie Animations
 
 # References
 
