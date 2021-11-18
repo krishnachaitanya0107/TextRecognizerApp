@@ -40,6 +40,7 @@ PLEASE MAKE SURE TO REMOVE THE .idea/ files before pushing a commit & Every PR w
 
 - ML kit Codelabs - https://codelabs.developers.google.com/codelabs/mlkit-android#0
 - ML kit Documentation - https://developers.google.com/ml-kit/vision/text-recognition/android#kotlin
+- Lottie animation - https://lottiefiles.com/38287-scanning-searching-for-data
 
 # Featured On
 
