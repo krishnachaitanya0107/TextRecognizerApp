@@ -14,6 +14,13 @@ Go to [Releases](https://github.com/krishnachaitanya0107/TextRecognizerApp/relea
 - Extracted text can be copied to clipboard or can be shared via any another text sharing app available on the user's device
 - Handles device rotation as well 
 
+# Screenshots
+<p align="center">
+  <img src="./docs/screenshots/Splash Screen.jpg" alt="Splash Screen" width="144" height="320" margin="30">
+  <img src="./docs/screenshots/Text Extraction.jpg" alt="Text Extraction Screen" width="320" height="144" margin="30">
+  <img src="./docs/screenshots/Copied to clipboard.jpg" alt="Copied to clipboard Screen" width="320" height="144" margin="30">
+</p>
+
 # Tools & Technology Used
 
 - Android Studio & Kotlin
