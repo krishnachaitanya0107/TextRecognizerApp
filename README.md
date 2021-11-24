@@ -9,7 +9,7 @@ Go to [Releases](https://github.com/krishnachaitanya0107/TextRecognizerApp/relea
 # Features
 
 - Detects text in images Using the ML Kit Text Recognition API
-- Uses the CameraX to show a viewfinder and display the camera preview 
+- Uses the CameraX Jetpack support library to show a viewfinder and display the camera preview 
 - Provides a Flashlight button to turn on/off the device flashlight if needed
 - Extracted text can be copied to clipboard or can be shared via any another text sharing app available on the user's device
 - Handles device rotation as well 
