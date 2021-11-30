@@ -24,7 +24,11 @@ import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import android.content.Intent
+import android.view.Menu
+import android.view.MenuItem
 
+const val PREVIEW_STATE = "PreviewState"
+const val IMAGE_STATE = "ImageState"
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
     lateinit var camera: Camera
+    var state = ""
 
     private lateinit var cameraExecutor: ExecutorService
 
@@ -67,6 +72,55 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
+
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            baseContext, it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults:
+        IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (allPermissionsGranted()) {
+                startCamera()
+            } else {
+                showToast(
+                    getString(R.string.permission_denied_msg)
+                )
+            }
+        }
+    }
+
+    /*override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.input) {
+            state = when (state) {
+                PREVIEW_STATE -> {
+                    item.setIcon(R.drawable.ic_photo_camera)
+                    IMAGE_STATE
+                }
+                IMAGE_STATE -> {
+                    item.setIcon(R.drawable.ic_image)
+                    PREVIEW_STATE
+                }
+                else -> {
+                    item.setIcon(R.drawable.ic_photo_camera)
+                    IMAGE_STATE
+                }
+            }
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }*/
 
     private fun runTextRecognition(bitmap: Bitmap) {
         val inputImage = InputImage.fromBitmap(bitmap, 0)
@@ -163,52 +217,35 @@ class MainActivity : AppCompatActivity() {
 
                     copyToClipboard.setOnClickListener {
                         val textToCopy = textInImage.text
-                        if (textToCopy.isNotEmpty()) {
+                        if (textToCopy.isNotEmpty() and (textToCopy != getString(R.string.no_text_found))) {
                             copyToClipboard(textToCopy)
+                        } else {
+                            showToast(getString(R.string.no_text_found))
                         }
                     }
 
                     share.setOnClickListener {
                         val textToCopy = textInImage.text.toString()
-                        if (textToCopy.isNotEmpty()) {
+                        if (textToCopy.isNotEmpty() and (textToCopy != getString(R.string.no_text_found))) {
                             shareText(textToCopy)
+                        } else {
+                            showToast(getString(R.string.no_text_found))
                         }
                     }
 
                     close.setOnClickListener {
-                        scrollView.visibility=View.GONE
+                        scrollView.visibility = View.GONE
                     }
 
                 }
 
             } catch (exc: Exception) {
+                showToast(getString(R.string.error_default_msg))
                 Log.e(TAG, "Use case binding failed", exc)
             }
 
         }, ContextCompat.getMainExecutor(this))
 
-    }
-
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(
-            baseContext, it
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults:
-        IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (allPermissionsGranted()) {
-                startCamera()
-            } else {
-                showToast(
-                    getString(R.string.permission_denied_msg)
-                )
-            }
-        }
     }
 
     private fun showToast(message: String) {
@@ -220,7 +257,7 @@ class MainActivity : AppCompatActivity() {
         shareIntent.action = Intent.ACTION_SEND
         shareIntent.type = "text/plain"
         shareIntent.putExtra(Intent.EXTRA_TEXT, text)
-        startActivity(Intent.createChooser(shareIntent, "Share via"))
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_text_title)))
     }
 
     private fun copyToClipboard(text: CharSequence) {
