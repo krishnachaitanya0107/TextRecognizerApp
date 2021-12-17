@@ -13,8 +13,8 @@ Go to [Releases](https://github.com/krishnachaitanya0107/TextRecognizerApp/relea
 - Can Pick an image from gallery for text recognition
 - Provides a Flashlight button to turn on/off the device flashlight if needed
 - Extracted text can be copied to clipboard or can be shared via any another text sharing app available on the user's device
-- Handles device rotation as well 
-- Highlights any links , phone numbers etc if found during text recognition
+- Handles device rotation 
+- Makes any links , phone numbers etc Clickable , if found during text recognition
 
 # Screenshots
 <p align="center">
