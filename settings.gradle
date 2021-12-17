@@ -4,6 +4,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url rootProject.projectDir.getAbsolutePath() + '/libraries' }
+        maven { url "https://jitpack.io" }
     }
 }
 rootProject.name = "Text Recognizer"

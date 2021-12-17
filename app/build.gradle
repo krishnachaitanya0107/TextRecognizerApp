@@ -67,4 +67,8 @@ dependencies {
 
     // Text features
     implementation "com.google.android.gms:play-services-mlkit-text-recognition:$mlKitVersion"
+
+    // gallery picker
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
+
 }

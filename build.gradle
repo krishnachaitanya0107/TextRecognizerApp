@@ -4,6 +4,7 @@ buildscript {
         google()
         mavenCentral()
         maven { url rootProject.projectDir.getAbsolutePath() + '/libraries' }
+        maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.2"

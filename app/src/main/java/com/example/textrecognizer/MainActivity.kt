@@ -8,6 +8,7 @@ import com.example.textrecognizer.databinding.ActivityMainBinding
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import android.Manifest
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.pm.PackageManager
@@ -22,12 +23,12 @@ import com.google.mlkit.vision.text.Text
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import android.content.Intent
+import android.net.Uri
 import android.text.util.Linkify
 import android.view.Menu
 import android.view.MenuItem
-
-const val PREVIEW_STATE = "PreviewState"
-const val IMAGE_STATE = "ImageState"
+import androidx.core.graphics.drawable.toBitmap
+import com.github.dhaval2404.imagepicker.ImagePicker
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,11 +36,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recognizer: TextRecognizer
     private val TAG = "Testing"
     private val SAVED_TEXT_TAG = "SavedText"
+
+    //private val SAVED_IMAGE_BITMAP = "SavedImage"
     private val REQUEST_CODE_PERMISSIONS = 10
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
     lateinit var camera: Camera
     var state = ""
+    var savedBitmap: Bitmap? = null
 
     private lateinit var cameraExecutor: ExecutorService
 
@@ -49,12 +53,18 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState != null) {
             val savedText = savedInstanceState.getString(SAVED_TEXT_TAG)
-            if (isTextValid(savedText)) {
-                binding.scrollView.visibility = View.VISIBLE
-                binding.textInImage.text = savedInstanceState.getString(SAVED_TEXT_TAG)
+            binding.apply {
+                if (isTextValid(savedText)) {
+                    scrollView.visibility = View.VISIBLE
+                    textInImage.text = savedInstanceState.getString(SAVED_TEXT_TAG)
+                }
+                if (savedBitmap != null) {
+                    previewImage.visibility = View.VISIBLE
+                    previewImage.setImageBitmap(savedBitmap)
+                }
+                //previewImage.setImageBitmap(savedInstanceState.getParcelable(SAVED_IMAGE_BITMAP))
             }
         }
-
         init()
         setContentView(binding.root)
     }
@@ -76,7 +86,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestPermissions() {
-        Log.d("testing", "got here")
         ActivityCompat.requestPermissions(
             this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
         )
@@ -113,31 +122,52 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.input) {
-            state = when (state) {
-                PREVIEW_STATE -> {
-                    item.setIcon(R.drawable.ic_photo_camera)
-                    IMAGE_STATE
-                }
-                IMAGE_STATE -> {
-                    item.setIcon(R.drawable.ic_image)
-                    PREVIEW_STATE
-                }
-                else -> {
-                    item.setIcon(R.drawable.ic_photo_camera)
-                    IMAGE_STATE
-                }
-            }
+        if (item.itemId == R.id.gallery) {
+            binding.scrollView.visibility = View.GONE
+            ImagePicker.with(this)
+                .galleryOnly()
+                .crop()
+                .compress(1024)
+                .maxResultSize(1080, 1080)
+                .start()
+
+            return true
+        } else if (item.itemId == R.id.refresh) {
+            binding.previewImage.visibility = View.GONE
+            savedBitmap = null
             return true
         }
         return super.onOptionsItemSelected(item)
-    }*/
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+                //Image Uri will not be null for RESULT_OK
+                val uri: Uri = data?.data!!
+
+                // Use Uri object instead of File to avoid storage permissions
+                binding.previewImage.apply {
+                    visibility = View.VISIBLE
+                    setImageURI(uri)
+                }
+                //runTextRecognition(binding.previewImage.drawable.toBitmap())
+            }
+            ImagePicker.RESULT_ERROR -> {
+                showToast(ImagePicker.getError(data))
+            }
+            else -> {
+                showToast("Task Cancelled")
+            }
+        }
+    }
 
     private fun runTextRecognition(bitmap: Bitmap) {
         val inputImage = InputImage.fromBitmap(bitmap, 0)
@@ -204,11 +234,21 @@ class MainActivity : AppCompatActivity() {
 
                 binding.apply {
                     // Set up the listener for take photo button
-                    cameraCaptureButton.setOnClickListener {
-                        if (viewFinder.bitmap != null) {
-                            runTextRecognition(viewFinder.bitmap!!)
-                        } else {
-                            showToast(getString(R.string.camera_error_default_msg))
+                    extractTextButton.setOnClickListener {
+                        when {
+                            previewImage.visibility == View.VISIBLE -> {
+                                savedBitmap = previewImage.drawable.toBitmap()
+                                runTextRecognition(savedBitmap!!)
+                            }
+                            viewFinder.bitmap != null -> {
+                                previewImage.visibility = View.VISIBLE
+                                savedBitmap = viewFinder.bitmap
+                                previewImage.setImageBitmap(viewFinder.bitmap!!)
+                                runTextRecognition(savedBitmap!!)
+                            }
+                            else -> {
+                                showToast(getString(R.string.camera_error_default_msg))
+                            }
                         }
                     }
 
@@ -299,10 +339,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.clear()
         val textInImage = (binding.textInImage.text).toString()
         if (isTextValid(textInImage)) {
             outState.putString(SAVED_TEXT_TAG, textInImage)
         }
+        /*if (binding.previewImage.visibility == View.VISIBLE) {
+            outState.putParcelable(SAVED_IMAGE_BITMAP, binding.previewImage.drawable.toBitmap())
+        }*/
     }
 
 }
