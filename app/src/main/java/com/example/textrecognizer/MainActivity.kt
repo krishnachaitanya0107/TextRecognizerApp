@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
     lateinit var camera: Camera
-    var state = ""
     var savedBitmap: Bitmap? = null
 
     private lateinit var cameraExecutor: ExecutorService
@@ -83,6 +82,52 @@ class MainActivity : AppCompatActivity() {
         } else {
             requestPermissions()
         }
+
+        binding.apply {
+            extractTextButton.setOnClickListener {
+                when {
+                    previewImage.visibility == View.VISIBLE -> {
+                        savedBitmap = previewImage.drawable.toBitmap()
+                        runTextRecognition(savedBitmap!!)
+                    }
+                    viewFinder.bitmap != null -> {
+                        previewImage.visibility = View.VISIBLE
+                        savedBitmap = viewFinder.bitmap
+                        previewImage.setImageBitmap(viewFinder.bitmap!!)
+                        runTextRecognition(savedBitmap!!)
+                    }
+                    else -> {
+                        showToast(getString(R.string.camera_error_default_msg))
+                    }
+                }
+            }
+
+
+
+            copyToClipboard.setOnClickListener {
+                val textToCopy = textInImage.text
+                if (isTextValid(textToCopy.toString())) {
+                    copyToClipboard(textToCopy)
+                } else {
+                    showToast(getString(R.string.no_text_found))
+                }
+            }
+
+            share.setOnClickListener {
+                val textToCopy = textInImage.text.toString()
+                if (isTextValid(textToCopy)) {
+                    shareText(textToCopy)
+                } else {
+                    showToast(getString(R.string.no_text_found))
+                }
+            }
+
+            close.setOnClickListener {
+                scrollView.visibility = View.GONE
+            }
+
+        }
+
     }
 
     private fun requestPermissions() {
@@ -108,7 +153,6 @@ class MainActivity : AppCompatActivity() {
                 binding.group.visibility = View.VISIBLE
                 startCamera()
             } else {
-                binding.group.visibility = View.GONE
                 binding.grantPermissionsButton.apply {
                     visibility = View.VISIBLE
                     setOnClickListener {
@@ -234,24 +278,6 @@ class MainActivity : AppCompatActivity() {
 
 
                 binding.apply {
-                    // Set up the listener for take photo button
-                    extractTextButton.setOnClickListener {
-                        when {
-                            previewImage.visibility == View.VISIBLE -> {
-                                savedBitmap = previewImage.drawable.toBitmap()
-                                runTextRecognition(savedBitmap!!)
-                            }
-                            viewFinder.bitmap != null -> {
-                                previewImage.visibility = View.VISIBLE
-                                savedBitmap = viewFinder.bitmap
-                                previewImage.setImageBitmap(viewFinder.bitmap!!)
-                                runTextRecognition(savedBitmap!!)
-                            }
-                            else -> {
-                                showToast(getString(R.string.camera_error_default_msg))
-                            }
-                        }
-                    }
 
                     camera.apply {
                         if (cameraInfo.hasFlashUnit()) {
@@ -272,29 +298,6 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
 
-                    }
-
-
-                    copyToClipboard.setOnClickListener {
-                        val textToCopy = textInImage.text
-                        if (isTextValid(textToCopy.toString())) {
-                            copyToClipboard(textToCopy)
-                        } else {
-                            showToast(getString(R.string.no_text_found))
-                        }
-                    }
-
-                    share.setOnClickListener {
-                        val textToCopy = textInImage.text.toString()
-                        if (isTextValid(textToCopy)) {
-                            shareText(textToCopy)
-                        } else {
-                            showToast(getString(R.string.no_text_found))
-                        }
-                    }
-
-                    close.setOnClickListener {
-                        scrollView.visibility = View.GONE
                     }
 
                 }
