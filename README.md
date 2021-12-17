@@ -19,8 +19,8 @@ Go to [Releases](https://github.com/krishnachaitanya0107/TextRecognizerApp/relea
 # Screenshots
 <p align="center">
   <img src="./docs/screenshots/Splash Screen.jpg" alt="Splash Screen" width="144" height="320" margin="30">
-  <img src="./docs/screenshots/Image.jpg" alt="Image Captured Screen" width="144" height="320" margin="30">
-  <img src="./docs/screenshots/Extracted Text.jpg" alt="Text Extraction Screen" width="144" height="320" margin="30">
+  <img src="./docs/screenshots/Image Capture.jpg" alt="Image Captured Screen" width="144" height="320" margin="30">
+  <img src="./docs/screenshots/Text Extraction.jpg" alt="Text Extraction Screen" width="144" height="320" margin="30">
 </p>
 
 # Tools & Technology Used
