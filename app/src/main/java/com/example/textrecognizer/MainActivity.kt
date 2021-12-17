@@ -19,11 +19,10 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
-import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import android.content.Intent
+import android.text.util.Linkify
 import android.view.Menu
 import android.view.MenuItem
 
@@ -49,8 +48,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         if (savedInstanceState != null) {
-            binding.scrollView.visibility = View.VISIBLE
-            binding.textInImage.text = savedInstanceState.getString(SAVED_TEXT_TAG)
+            val savedText = savedInstanceState.getString(SAVED_TEXT_TAG)
+            if (isTextValid(savedText)) {
+                binding.scrollView.visibility = View.VISIBLE
+                binding.textInImage.text = savedInstanceState.getString(SAVED_TEXT_TAG)
+            }
         }
 
         init()
@@ -65,14 +67,20 @@ class MainActivity : AppCompatActivity() {
 
         // Request camera permissions
         if (allPermissionsGranted()) {
+            binding.grantPermissionsButton.visibility = View.GONE
+            binding.group.visibility = View.VISIBLE
             startCamera()
         } else {
-            ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
-            )
+            requestPermissions()
         }
     }
 
+    private fun requestPermissions() {
+        Log.d("testing", "got here")
+        ActivityCompat.requestPermissions(
+            this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+        )
+    }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
@@ -87,8 +95,17 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
+                binding.grantPermissionsButton.visibility = View.GONE
+                binding.group.visibility = View.VISIBLE
                 startCamera()
             } else {
+                binding.group.visibility = View.GONE
+                binding.grantPermissionsButton.apply {
+                    visibility = View.VISIBLE
+                    setOnClickListener {
+                        requestPermissions()
+                    }
+                }
                 showToast(
                     getString(R.string.permission_denied_msg)
                 )
@@ -154,6 +171,8 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.no_text_found)
         }
 
+        Linkify.addLinks(binding.textInImage, Linkify.ALL)
+
     }
 
     private fun startCamera() {
@@ -167,7 +186,7 @@ class MainActivity : AppCompatActivity() {
             val preview = Preview.Builder()
                 .build()
                 .also {
-                    it.setSurfaceProvider(viewFinder.surfaceProvider)
+                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
                 }
 
             // Select back camera as a default
@@ -206,9 +225,9 @@ class MainActivity : AppCompatActivity() {
 
                         cameraInfo.torchState.observe(this@MainActivity) { torchState ->
                             if (torchState == TorchState.OFF) {
-                                torchButton.setImageResource(R.drawable.ic_flashlight_on)
+                                torchImage.setImageResource(R.drawable.ic_flashlight_on)
                             } else {
-                                torchButton.setImageResource(R.drawable.ic_flashlight_off)
+                                torchImage.setImageResource(R.drawable.ic_flashlight_off)
                             }
                         }
 
@@ -217,7 +236,7 @@ class MainActivity : AppCompatActivity() {
 
                     copyToClipboard.setOnClickListener {
                         val textToCopy = textInImage.text
-                        if (textToCopy.isNotEmpty() and (textToCopy != getString(R.string.no_text_found))) {
+                        if (isTextValid(textToCopy.toString())) {
                             copyToClipboard(textToCopy)
                         } else {
                             showToast(getString(R.string.no_text_found))
@@ -226,7 +245,7 @@ class MainActivity : AppCompatActivity() {
 
                     share.setOnClickListener {
                         val textToCopy = textInImage.text.toString()
-                        if (textToCopy.isNotEmpty() and (textToCopy != getString(R.string.no_text_found))) {
+                        if (isTextValid(textToCopy)) {
                             shareText(textToCopy)
                         } else {
                             showToast(getString(R.string.no_text_found))
@@ -250,6 +269,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun isTextValid(text: String?): Boolean {
+        if (text == null) return false
+        return text.isNotEmpty() and !text.equals(getString(R.string.no_text_found))
     }
 
     private fun shareText(text: String) {
@@ -276,7 +300,7 @@ class MainActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         val textInImage = (binding.textInImage.text).toString()
-        if (textInImage.isNotEmpty()) {
+        if (isTextValid(textInImage)) {
             outState.putString(SAVED_TEXT_TAG, textInImage)
         }
     }

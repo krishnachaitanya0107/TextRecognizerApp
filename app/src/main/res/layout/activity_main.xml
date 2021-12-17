@@ -79,32 +79,26 @@
 
     </ScrollView>
 
-    <ImageView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/torchButton"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="50dp"
-        android:background="@color/purple_200"
         android:elevation="2dp"
-        android:padding="10dp"
-        android:src="@drawable/ic_flashlight_on"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="@id/cameraCaptureButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/cameraCaptureButton" />
+        app:cardBackgroundColor="@color/purple_200"
+        app:layout_constraintTop_toTopOf="@id/cameraCaptureButton">
 
+        <ImageView
+            android:id="@+id/torchImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_flashlight_on" />
 
-    <ImageView
-        android:id="@+id/share"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginEnd="50dp"
-        android:background="@color/purple_200"
-        android:elevation="2dp"
-        android:padding="10dp"
-        android:src="@drawable/ic_share"
-        app:layout_constraintBottom_toBottomOf="@id/cameraCaptureButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/cameraCaptureButton" />
+    </com.google.android.material.card.MaterialCardView>
 
     <Button
         android:id="@+id/cameraCaptureButton"
@@ -118,5 +112,47 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/torchButton"
         app:layout_constraintRight_toLeftOf="@id/share" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="50dp"
+        android:elevation="2dp"
+        app:cardCornerRadius="10dp"
+        app:cardBackgroundColor="@color/purple_200"
+        app:layout_constraintBottom_toBottomOf="@id/cameraCaptureButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cameraCaptureButton">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_share" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <Button
+        android:id="@+id/grantPermissionsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:elevation="2dp"
+        android:padding="10dp"
+        android:text="Grant Permissions"
+        android:textAllCaps="false"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="torchButton,share,cameraCaptureButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
