@@ -158,6 +158,7 @@ class MainActivity : AppCompatActivity() {
                     visibility = View.VISIBLE
                     setImageURI(uri)
                 }
+                binding.group.visibility = View.VISIBLE
                 //runTextRecognition(binding.previewImage.drawable.toBitmap())
             }
             ImagePicker.RESULT_ERROR -> {
