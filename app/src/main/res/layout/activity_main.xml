@@ -23,68 +23,77 @@
         android:background="?attr/colorOnPrimary"
         android:visibility="gone" />
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/textInImageLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="50dp"
-        android:background="@drawable/gradient"
+        app:cardBackgroundColor="@color/black"
         android:elevation="2dp"
         android:visibility="gone"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@id/extractTextButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/close"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_close"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/title" />
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Text In Image"
-                android:textAlignment="center"
-                android:textColor="@color/purple_200"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/copyToClipboard"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_copy_clipboard"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/title" />
-
-            <TextView
-                android:id="@+id/textInImage"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title" />
+                android:padding="8dp">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/close"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/close_dialog"
+                    android:src="@drawable/ic_close"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/title" />
 
-    </ScrollView>
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/text_in_image"
+                    android:textAlignment="center"
+                    android:textColor="@color/purple_200"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/copyToClipboard"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/copy_to_clipboard"
+                    android:src="@drawable/ic_copy_clipboard"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/title" />
+
+                <TextView
+                    android:id="@+id/textInImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/title" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/torchButton"
@@ -92,7 +101,6 @@
         android:layout_height="0dp"
         android:layout_marginStart="50dp"
         android:elevation="2dp"
-        app:cardBackgroundColor="@color/purple_200"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="@id/extractTextButton"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,7 +110,9 @@
             android:id="@+id/torchImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:background="@color/grey"
+            android:contentDescription="@string/torch_button"
             android:src="@drawable/ic_flashlight_on" />
 
     </com.google.android.material.card.MaterialCardView>
@@ -136,12 +146,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
+            android:contentDescription="@string/share_text"
             android:src="@drawable/ic_share" />
 
     </com.google.android.material.card.MaterialCardView>
 
 
-    <Button
+    <!--Button
         android:id="@+id/grantPermissionsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -153,12 +164,12 @@
         app:layout_constraintBottom_toTopOf="@id/extractTextButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:visibility="visible" />
+        tools:visibility="visible" /-->
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="torchButton,share,extractTextButton" />
+        app:constraint_referenced_ids="share,extractTextButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

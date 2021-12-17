@@ -23,6 +23,7 @@ import com.google.mlkit.vision.text.Text
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.text.util.Linkify
 import android.view.Menu
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             val savedText = savedInstanceState.getString(SAVED_TEXT_TAG)
             binding.apply {
                 if (isTextValid(savedText)) {
-                    scrollView.visibility = View.VISIBLE
+                    textInImageLayout.visibility = View.VISIBLE
                     textInImage.text = savedInstanceState.getString(SAVED_TEXT_TAG)
                 }
                 if (savedBitmap != null) {
@@ -76,8 +77,6 @@ class MainActivity : AppCompatActivity() {
 
         // Request camera permissions
         if (allPermissionsGranted()) {
-            binding.grantPermissionsButton.visibility = View.GONE
-            binding.group.visibility = View.VISIBLE
             startCamera()
         } else {
             requestPermissions()
@@ -123,7 +122,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             close.setOnClickListener {
-                scrollView.visibility = View.GONE
+                textInImageLayout.visibility = View.GONE
             }
 
         }
@@ -149,16 +148,8 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
-                binding.grantPermissionsButton.visibility = View.GONE
-                binding.group.visibility = View.VISIBLE
                 startCamera()
             } else {
-                binding.grantPermissionsButton.apply {
-                    visibility = View.VISIBLE
-                    setOnClickListener {
-                        requestPermissions()
-                    }
-                }
                 showToast(
                     getString(R.string.permission_denied_msg)
                 )
@@ -173,7 +164,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.gallery) {
-            binding.scrollView.visibility = View.GONE
+            binding.textInImageLayout.visibility = View.GONE
             ImagePicker.with(this)
                 .galleryOnly()
                 .crop()
@@ -182,9 +173,13 @@ class MainActivity : AppCompatActivity() {
                 .start()
 
             return true
-        } else if (item.itemId == R.id.refresh) {
-            binding.previewImage.visibility = View.GONE
-            savedBitmap = null
+        } else if (item.itemId == R.id.camera) {
+            if(!allPermissionsGranted()){
+                requestPermissions()
+            } else {
+                binding.previewImage.visibility = View.GONE
+                savedBitmap = null
+            }
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -202,14 +197,13 @@ class MainActivity : AppCompatActivity() {
                     visibility = View.VISIBLE
                     setImageURI(uri)
                 }
-                binding.group.visibility = View.VISIBLE
                 //runTextRecognition(binding.previewImage.drawable.toBitmap())
             }
             ImagePicker.RESULT_ERROR -> {
                 showToast(ImagePicker.getError(data))
             }
             else -> {
-                showToast("Task Cancelled")
+                showToast("No Image Selected")
             }
         }
     }
@@ -220,7 +214,7 @@ class MainActivity : AppCompatActivity() {
         recognizer
             .process(inputImage)
             .addOnSuccessListener { text ->
-                binding.scrollView.visibility = View.VISIBLE
+                binding.textInImageLayout.visibility = View.VISIBLE
                 processTextRecognitionResult(text)
             }.addOnFailureListener { e ->
                 e.printStackTrace()
@@ -280,6 +274,7 @@ class MainActivity : AppCompatActivity() {
                 binding.apply {
 
                     camera.apply {
+                        torchImage.setBackgroundColor(resources.getColor(R.color.purple_200))
                         if (cameraInfo.hasFlashUnit()) {
                             torchButton.setOnClickListener {
                                 cameraControl.enableTorch(cameraInfo.torchState.value == TorchState.OFF)
@@ -301,7 +296,6 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 }
-
             } catch (exc: Exception) {
                 showToast(getString(R.string.error_default_msg))
                 Log.e(TAG, "Use case binding failed", exc)
@@ -316,7 +310,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isTextValid(text: String?): Boolean {
-        if (text == null) return false
+        if (text == null)
+            return false
+
         return text.isNotEmpty() and !text.equals(getString(R.string.no_text_found))
     }
 

@@ -6,4 +6,9 @@
     <string name="clipboard_text">Copied to Clipboard</string>
     <string name="torch_not_available_msg">Oops , Torch Not Available</string>
     <string name="share_text_title">Share via</string>
+    <string name="text_in_image">Text In Image</string>
+    <string name="copy_to_clipboard">Copy To ClipBoard</string>
+    <string name="close_dialog">Close Dialog</string>
+    <string name="torch_button">Torch Button</string>
+    <string name="share_text">Share Text</string>
 </resources>
