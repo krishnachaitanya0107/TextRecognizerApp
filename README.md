@@ -53,7 +53,3 @@ PLEASE MAKE SURE TO REMOVE THE .idea/ files before pushing a commit & Every PR w
 - ML kit Documentation - https://developers.google.com/ml-kit/vision/text-recognition/android#kotlin
 - Lottie animation - https://lottiefiles.com/38287-scanning-searching-for-data
 - Image Picker Library - https://github.com/Dhaval2404/ImagePicker
-
-# Featured On
-
-https://androidexample365.com/text-recognizer-app-using-the-ml-kit/
